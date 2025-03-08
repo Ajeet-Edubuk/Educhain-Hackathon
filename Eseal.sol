@@ -117,7 +117,6 @@ contract EdubukEsealer is Ownable {
     
     
     // string to bytes32 conversion
-
     function stringToBytes32(
         string memory source
     ) private pure returns (bytes32 result) {
@@ -359,5 +358,141 @@ contract EdubukEsealer is Ownable {
             certificates[byte_hash].certURI = data[i].URI;
         }
     }
+
+    // This function to delete certificates
+    function deleteCertificate(string memory _hash) external onlyInstitute {
+        bytes32 byte_hash = stringToBytes32(_hash);
+        require(certificates[byte_hash].timestamp != 0,"Certificate does not exist");
+        delete certificates[byte_hash];
+    }
+
+    // This function is used to verify certificate with data
+
+    function viewCertificateData(
+        string memory _hash
+    )
+        external
+        view
+        returns (
+            string memory,
+            string memory,
+            string memory,
+            string memory,
+            string memory,
+            address,
+            uint256
+        )
+    {
+        bytes32 byte_hash = stringToBytes32(_hash);
+        require(
+            certificates[byte_hash].timestamp != 0,
+            "Certificate does not exists"
+        );
+        Cert memory temp = certificates[byte_hash];
+        //  require(approvedInstitutes[temp.institute.id][msg.sender] || institutewitnesschk[temp.institute.id][msg.sender],"not the institute approved regulator");
+        return (
+            temp.studentname,
+            temp.issuerName,
+            temp.certType,
+            temp.certHash,
+            temp.certURI,
+            temp.witness,
+            temp.timestamp
+        );
+    }
+
+    // This function is used to verify Institute
+
+    function verifyInstitute()
+        external
+        view
+        returns (string memory, string memory, address, uint256)
+    {
+        require(
+            registeredInstitute[msg.sender],
+            "Not the registered institute"
+        );
+        uint256 id = institute_ID[msg.sender];
+        return (
+            institutes[id].instituteName,
+            institutes[id].ackronym,
+            institutes[id].currentWitness,
+            institutes[id].id
+        );
+    }
+
+    // This function is used to verify contract owner
+
+    function verifyContractOwner() external view returns (bool) {
+        if (msg.sender == Contractowner) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // This function is used to get institute ID
+
+    function getInstituteID(address _witness) external view returns (uint256) {
+        return (institute_ID[_witness]);
+    }
+
+    // this function to view a certificate URI by providing its hash // 14 may added
+    function viewCertificateURI(
+        string memory _hash
+    ) external view returns (string memory) {
+        return certificates[stringToBytes32(_hash)].certURI;
+    }
+
+    // This function is used to get student info.
+
+    function getStudentInfo(
+        address _studentAdd
+    ) external view returns (Student memory) {
+        require(studentInstituteId[msg.sender] != 0, "You are not authorized");
+        return studentInfo[_studentAdd];
+    }
+
+    // This function is used to delete the student data
+    function deleteStudentData(address _student) external eitherInstituteOrOwner {
+        require(studentInfo[_student].studentAdd != address(0),"Student not registered");
+        delete studentInfo[_student];
+        delete studentInstituteId[_student];
+    }
+
+    // This function is used to get insttitute list
+    function getInstituteList()
+        external
+        view
+        onlyOwner
+        returns (InstituteInfo[] memory)
+    {
+        return instituteList[msg.sender];
+    }
+
+    // This function is used to remove the institute
+    function deleteInstitute(address _institute) external onlyOwner {
+        require(registeredInstitute[_institute], "Institute not registered");
+        uint256 id = institute_ID[_institute];
+        // Delete mappings and institute data
+        delete institutes[id];
+        delete instituteWitnesses[id];
+        delete institute_ID[_institute];
+        _removeInstituteFromList(_institute);
+        registeredInstitute[_institute] = false;
+        emit InstituteRevoked(id, _institute);
+    }
+
+    // Helper function to remove an institute from the array
+    function _removeInstituteFromList(address _institute) internal {
+        uint256 len = instituteList[msg.sender].length;
+    for (uint256 i = 0; i < len; i++) {
+        if (instituteList[msg.sender][i].instituteAddress == _institute) {
+            instituteList[msg.sender][i] = instituteList[msg.sender][len - 1]; // Move the last element to this index
+            instituteList[msg.sender].pop(); // Remove the last element
+            break;
+        }
+    }
+}
 
 }
