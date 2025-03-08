@@ -4,7 +4,6 @@ pragma solidity ^0.8.20;
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 contract EdubukEsealer is Ownable {
-
     /////////////////// STRUCTURE /////////////////////////////////////////////////////////////////////
 
     struct Institute {
@@ -79,13 +78,35 @@ contract EdubukEsealer is Ownable {
 
     event InstituteRegistered(uint256 id, string name);
 
+    event InstituteWitnessUpdated(uint256 id, address witness);
+
+    event InstituteRevoked(uint256 id, address instituteAddress); 
+
+
     ///////////////// CONSTRUCTOR /////////////////////////////////////////////////////////////////////////
 
     constructor(address contractOwner) Ownable(contractOwner){}
 
+    ///////////////UTILITY FUNCTIONS/////////////////////////////////////
+    
+    
+    // string to bytes32 conversion
+
+    function stringToBytes32(
+        string memory source
+    ) private pure returns (bytes32 result) {
+        bytes memory tempEmptyStringTest = bytes(source);
+        if (tempEmptyStringTest.length == 0) {
+            return 0x0;
+        }
+        assembly {
+            result := mload(add(source, 32))
+        }
+    }
+
     //////////////////////////////// FUNCTIONS ///////////////////////////////////////////////////////
 
-    // This function is used to register Institute by admin
+    // This function is used to register Institute
     function registerInstitute(
         string memory _instituteName,
         string memory _ackronynm,
@@ -111,4 +132,49 @@ contract EdubukEsealer is Ownable {
         emit InstituteRegistered(InstituteID, _instituteName);
         InstituteID++;
     }
+
+    // This Function is used to Update the Witness
+
+    function updateWitness(address _newwitness) external {
+        uint256 id = institute_ID[msg.sender];
+        require(
+            institutewitnesschk[id][msg.sender] || msg.sender == Contractowner,
+            "Not the correct institute"
+        );
+        institutes[id].currentWitness = _newwitness;
+        institutes[id].witnessCount++;
+        registeredInstitute[_newwitness] = true;
+        instituteWitnesses[id].push(_newwitness);
+        institutewitnesschk[id][_newwitness] = true;
+        institute_ID[_newwitness] = id;
+        emit InstituteWitnessUpdated(id, _newwitness);
+    }
+
+    // this function is used to revoke Witness
+    function revokeWitness(address _witness) external {
+        uint256 id = institute_ID[msg.sender];
+        require(
+            institutewitnesschk[id][msg.sender] || msg.sender == Contractowner,
+            "Not the correct institute"
+        );
+        require(
+            institutes[id].witnessCount - 1 > 0,
+            "There cannot be zero witnesses"
+        );
+        institutes[id].witnessCount--;
+        registeredInstitute[_witness] = false;
+        institutewitnesschk[id][_witness] = false;
+    }
+
+    // This function is used to revoke institute
+    function revokeInstitute(address _institute) external onlyOwner {
+        require(registeredInstitute[_institute], "Institute not registered");
+
+        uint256 id = institute_ID[_institute];
+        delete institutes[id];
+        registeredInstitute[_institute] = false;
+
+        emit InstituteRevoked(id, _institute);
+    }
+
 }
