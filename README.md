@@ -5,7 +5,9 @@ Eduprovince makes credentials verification and background checks secure, efficie
 
 Whitepaper, Pitchdeck and One-Pager: https://drive.google.com/drive/folders/1fA-XGaz3OWDLDFFHLfqSbEGPv3xvEAAq?usp=sharing
 
-**There are 4 stakeholders as mentioned in the diagram below:**
+## Check out demo video : https://www.youtube.com/watch?v=J19gpJ49vGU
+
+**There are 4 stakeholders :**
 
 1.) Issuer: University or Employer who issues the academic certificate or Work-Experience certificate.
 
@@ -15,10 +17,22 @@ Whitepaper, Pitchdeck and One-Pager: https://drive.google.com/drive/folders/1fA-
 
 4.) Requestor: Third party background verification companies: These companies request the candidate to share their digitally verified certificate stored on the blockchain with them for verification purposes.
 
-![image](https://github.com/user-attachments/assets/60901a8b-143c-41e6-947c-aa77b627f4cb)
+## Screenshots
+![image](https://github.com/user-attachments/assets/c7e9eb9b-4f99-4fa8-8aa9-1aa32d7f86bd)
+![image](https://github.com/user-attachments/assets/c816ddb7-68af-4d08-b96f-fe3509df3db7)
+![image](https://github.com/user-attachments/assets/72147c0c-4cfc-44a4-8800-b02bcdcb801e)
+![image](https://github.com/user-attachments/assets/76b24731-0365-4d0e-9ce7-14a2a4700042)
+![image](https://github.com/user-attachments/assets/983c59b6-e628-490b-aa30-48497fe6a370)
+![image](https://github.com/user-attachments/assets/81cbd8ff-802c-4cd1-b23f-e62debb1bc11)
+![image](https://github.com/user-attachments/assets/0fd8f500-a17b-4bbc-b667-458ebc398465)
+![image](https://github.com/user-attachments/assets/e47ae541-5be4-4eef-a793-3bf2f37a14d8)
+![image](https://github.com/user-attachments/assets/ee2d25db-1dc4-49b9-9af0-7b20078eba93)
+![image](https://github.com/user-attachments/assets/cdbe9e06-ab0d-49a4-bc2a-b8f8a836682d)
+![image](https://github.com/user-attachments/assets/f0ab3009-a592-495f-a298-209b40301024)
 
 
-**This project includes a decentralized application (dApp) for recording and verifying certificates on the Solana blockchain. The dApp has two main components:**
+
+**This project includes a decentralized application (dApp) for recording and verifying certificates on the Educhain blockchain. The dApp has two main components:**
 
 **1. e-Sealing**
 
