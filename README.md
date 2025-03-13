@@ -59,7 +59,7 @@ This dApp has various applications requiring immutable and verifiable records of
 - **Professional Licenses**
 - **Authenticity Certificates for Digital or Physical Assets**
 
-  **Tech Stack**
+## Tech Stack
   - Frontend: React,Tailwind,CSS.
   - Backend: Nodejs, ExpressJs, MongoDB.
   - Smart Contract: Solidity.
